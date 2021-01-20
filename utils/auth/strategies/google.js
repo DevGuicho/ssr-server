@@ -8,19 +8,19 @@ passport.use(
     {
       clientID: config.googleClientId,
       clientSecret: config.googleClientSecret,
-      callbackURL: "/auth/google/callback"
+      callbackURL: "/auth/google/callback",
     },
-    function(accessToken, refreshToken, profile, cb) {
+    async function (accessToken, refreshToken, profile, cb) {
       const { data, status } = await axios({
-      url: `${config.api.url}/api/auth/sign-provider`,
-      method: 'POST',
-      data: {
-        name: profile._json.name,
-        email: profile._json.email,
-        password: profile.id,
-        apiKeyToken: config.api.keyToken,
-      },
-    });
+        url: `${config.api.url}/api/auth/sign-provider`,
+        method: "POST",
+        data: {
+          name: profile._json.name,
+          email: profile._json.email,
+          password: profile.id,
+          apiKeyToken: config.api.keyToken,
+        },
+      });
 
       if (!data || status !== 200) {
         return cb(boom.unauthorized(), false);
